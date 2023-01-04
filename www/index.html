@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title id="title"></title>
+        <link rel="stylesheet" href="css/style.css">
+        
+        <view name="Creer une facture">
+    </head>
+    <body>
+        <v-app id="app">
+            <v-navigation-drawer permanent app>
+                <v-list>
+                    <v-list-item class="picture-profile">
+                        <v-list-item-avatar>
+                            <v-img :src="user.picture"></v-img>
+                        </v-list-item-avatar>
+                        
+                        <v-list-item-content class="profile">
+                            <v-list-item-title class="text-h6">
+                                {{ user.title }}
+                            </v-list-item-title>
+                            <v-list-item-subtitle> {{ user.subtitle }} </v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list>
+    
+                <v-divider></v-divider>
+    
+                <v-list nav dense v-for="item in nav" :key="item">
+                    <v-list-item link @click="window.location.href = item.link">
+                        <v-list-item-icon>
+                            <v-icon>{{ item.icon }}</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title style="padding-left: 6px;">{{ item.title }}</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+
+
+                <template v-slot:append>
+                    <div class="d-flex justify-center">
+                        <v-switch v-model="switch1" :label="`Mode sombre`" @click="vm.changeTheme(this)"></v-switch>
+                    </div>
+                </template>
+            </v-navigation-drawer>
+            <v-main>
+                <v-container fluid>
+                    <v-alert v-if="message" elevation="24" :value="alert" :type="message.type" transition="scale-transition">
+                        {{ message.content }}
+                    </v-alert>
+
+                    <v-stepper v-model="step" vertical elevation="24">
+                        <v-stepper-step :complete="step > 1" step="1">
+                            Informations clients
+                        </v-stepper-step>
+                        <v-stepper-content step="1">
+                            <v-text-field class="pt-2" v-model="nom_client" label="Nom" outlined></v-text-field>
+                            <v-text-field v-model="prenom_client" label="Prénom" outlined></v-text-field>
+                            <v-btn color="primary" @click="step = 2">
+                                Continuer
+                            </v-btn>
+                        </v-stepper-content>
+
+                        <v-stepper-step :complete="step > 2" step="2">
+                            Informations administratives
+                        </v-stepper-step>
+                        <v-stepper-content step="2">
+                            <v-select class="pt-2" v-model="select_periode" :items="periodes" label="Periode en cours" outlined></v-select>
+                            <v-text-field v-model="n_facture" label="N° de facutre" outlined></v-text-field>
+                            <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date" transition="scale-transition" offset-y min-width="auto">
+                                <template v-slot:activator="{ on, attrs }">
+                                <v-text-field v-model="date" label="Paiement avant le" outlined readonly v-bind="attrs" v-on="on" ></v-text-field>
+                                </template>
+                                <v-date-picker v-model="date" no-title scrollable locale="fr-fr">
+                                    <v-spacer></v-spacer>
+                                    <v-btn text color="primary" @click="menu = false">
+                                        Annuler
+                                    </v-btn>
+                                    <v-btn text color="primary" @click="$refs.menu.save(date)">
+                                        OK
+                                    </v-btn>
+                                </v-date-picker>
+                            </v-menu>
+                            <v-select :items="paiement" v-model="select_paiement" label="Mode de paiement" outlined></v-select>
+                            <v-btn color="primary" @click="step = 3">
+                                Continuer
+                            </v-btn>
+                            <v-btn text @click="step = 1">
+                                Retour en arrière
+                            </v-btn>
+                        </v-stepper-content>
+
+                        <v-stepper-step :complete="step == 4" step="3">
+                            Informations de l'activité
+                        </v-stepper-step>
+                        <v-stepper-content step="3">
+                            <p>
+                                Appuyez sur "Ajouter un élément" pour ajouter une ligne au tableau
+                            </p>
+                            <v-simple-table class="mb-2">
+                                <template v-slot:default>
+                                    <thead>
+                                        <tr>
+                                            <th class="text-left">
+                                                Prestation
+                                            </th>
+                                            <th class="text-left">
+                                                Tarif TTC
+                                            </th>
+                                            <th class="text-right">
+                                                <v-btn text small @click="ajouterActivite()">
+                                                    Ajouter un élément
+                                                </v-btn>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-if="activites.length > 0" v-for="activite in activites" :keys="activite">
+                                            <td>
+                                                <v-text-field v-model="activite.presta" small></v-text-field>
+                                            </td>
+                                            <td>
+                                                <v-text-field v-model="activite.tarif" small></v-text-field>
+                                            </td>
+                                            <td class="text-right">
+                                                <v-btn v-if="activite.id != 0" fab small color="error" dark @click="retirerElm(activite.id)">
+                                                    <v-icon>
+                                                        mdi-minus
+                                                    </v-icon>
+                                                </v-btn>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </template>
+                            </v-simple-table>
+                            
+
+                            <v-bottom-sheet v-model="bottom">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-btn color="primary" v-bind="attrs" v-on="on">
+                                        Continuer
+                                    </v-btn>
+                                </template>
+                                <v-sheet class="text-center" height="300px">
+                                    <v-btn class="mt-6" text color="primary" @click="save()">
+                                        Sauvegarder la facture
+                                    </v-btn>
+                                    <v-btn class="mt-6" text color="primary" @click="step = 4; bottom = !bottom; creerPDF()">
+                                        Exporter le PDF
+                                    </v-btn>
+                                    <v-btn class="mt-6" text color="error" @click="bottom = !bottom">
+                                        Annuler
+                                    </v-btn>
+
+                                    <div class="py-3 mx-6">
+                                        <v-text-field v-model="nomFichier" label="Nom du fichier" outlined></v-text-field>
+                                        <v-file-input v-model="pdfPath" chips label="Selectionnez un fichier qui se trouve dans le répertoire d'exportation" outlined></v-file-input>
+                                        <small v-if="pdfPath">Le fichier s'exportera dans : {{ pdfPath.path.replace(pdfPath.name, "") + (nomFichier ? `${nomFichier}.pdf` : "")  }}</small>
+                                    </div>
+                                </v-sheet>
+                            </v-bottom-sheet>
+
+                            <v-btn text @click="step = 2">
+                                Retour en arrière
+                            </v-btn>
+                        </v-stepper-content>
+                    </v-stepper>
+
+                </v-container>
+            </v-main>
+        </v-app>
+
+        <script src="js/vue.min.js"></script>
+        <script src="js/vuetify.min.js"></script>
+
+        <script src="js/render.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>

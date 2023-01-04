@@ -1,0 +1,52 @@
+[
+	{
+		"nom": "RAGONDADAD",
+		"prenom": "Aeddaadmatéis",
+		"periode": "Saison 2022 - 2023",
+		"n_facture": "2022-4",
+		"dateLimite": "2022-12-24",
+		"modePaiement": "Virement bancaire",
+		"activites": [
+			{
+				"id": 0,
+				"presta": "Cours",
+				"tarif": 25
+			},
+			{
+				"id": 2,
+				"presta": "Cours",
+				"tarif": "0112"
+			}
+		],
+		"dateCreation": "2022-12-24",
+		"montantTotal": 137,
+		"client": "RAGONDADAD Aeddaadmatéis"
+	},
+	{
+		"nom": "KJDF",
+		"prenom": "Jdkfgv",
+		"periode": "Saison 2022 - 2023",
+		"n_facture": "2022-5",
+		"dateLimite": "2022-12-24",
+		"modePaiement": "Chèque",
+		"activites": [
+			{
+				"id": 0,
+				"presta": "Cours",
+				"tarif": 25
+			},
+			{
+				"id": 2,
+				"presta": "Cours",
+				"tarif": "12"
+			},
+			{
+				"id": 3,
+				"presta": "Cours",
+				"tarif": "353"
+			}
+		],
+		"dateCreation": "2022-12-24",
+		"montantTotal": 390
+	}
+]

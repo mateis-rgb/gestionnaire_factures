@@ -1,0 +1,15 @@
+@import url("https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css");
+@import url("vuetify.min.css");
+@import url("https://fonts.googleapis.com/css?family=Poppins:100,300,400,500,700,900");
+
+* {
+    font-family: "Poppins";
+}
+
+.picture-profile {
+    padding-left: 7.5px;
+}
+
+.profile {
+    padding-left: 10px;
+}

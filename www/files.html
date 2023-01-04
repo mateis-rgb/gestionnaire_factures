@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title id="title"></title>
+        <link rel="stylesheet" href="css/style.css">
+
+        <view name="Mes factures">
+    </head>
+    <body>
+        <v-app id="app">
+            <v-app-bar class="mb-6" absolute color="primary" dark elevate-on-scroll scroll-target="#scrolling-techniques">
+                <v-app-bar-nav-icon @click="window.location.href = 'index.html'">
+                    <v-icon>
+                        mdi-arrow-left
+                    </v-icon>
+                </v-app-bar-nav-icon>
+
+                <v-toolbar-title>Mes factures</v-toolbar-title>
+
+                <v-spacer></v-spacer>
+
+                <v-text-field v-model="search" append-icon="mdi-magnify" label="Rechercher une facture..." single-line hide-details></v-text-field>
+            </v-app-bar>
+            <v-main id="scrolling-techniques">
+                <br><br>
+                <v-container fluid>
+                    <v-alert v-if="message" elevation="24" :value="alert" :type="message.type" transition="scale-transition">
+                        {{ message.content }}
+                    </v-alert>
+                    <v-card elevation="24">
+                        <v-card-text>
+                            <v-data-table :headers="headers" :items="factures" :class="headers.class" :search="search">
+                                <template v-slot:item.action="{ item }">
+                                    <td class="text-right">
+                                        <v-btn fab small elevation="0" color="primary" dark @click="editFacture(item)">
+                                            <v-icon>
+                                                mdi-pencil
+                                            </v-icon>
+                                        </v-btn>
+                                        
+                                        <v-bottom-sheet v-model="bottom">
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-btn fab small elevation="0" color="primary" dark  v-bind="attrs" v-on="on">
+                                                    <v-icon>
+                                                        mdi-file-download
+                                                    </v-icon>
+                                                </v-btn>
+                                            </template>
+                                            <v-sheet class="text-center" height="300px">
+                                                <v-btn class="mt-6" text color="primary" @click="vm.facture = item; creerPDF();">
+                                                    Exporter le PDF
+                                                </v-btn>
+                                                <v-btn class="mt-6" text color="error" @click="bottom = !bottom">
+                                                    Annuler
+                                                </v-btn>
+            
+                                                <div class="py-3 mx-6">
+                                                    <v-text-field v-model="nomFichier" label="Nom du fichier" outlined></v-text-field>
+                                                    <v-file-input v-model="pdfPath" v-on:change="disabledButton('export')" chips label="Selectionnez un fichier qui se trouve dans le répertoire d'exportation" outlined></v-file-input>
+                                                    <small v-if="pdfPath">Le fichier s'exportera dans : {{ pdfPath.path.replace(pdfPath.name, "") + (nomFichier ? `${nomFichier}.pdf` : "")  }}</small>
+                                                </div>
+                                            </v-sheet>
+                                        </v-bottom-sheet>   
+                                    </td>
+                                </template>
+                            </v-data-table>
+                        </v-card-text>
+                    </v-card>
+                </v-container>
+            </v-main>
+        </v-app>
+
+        <script src="js/vue.min.js"></script>
+        <script src="js/vuetify.min.js"></script>
+
+        <script src="js/render.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>
