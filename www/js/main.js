@@ -67,7 +67,7 @@ let vm = new Vue({
         },
         ajouterActivite() {
             this.activites.push({
-                id: this.activites.length + 1,
+                id: this.activites.length,
                 presta: "Cours",
                 tarif: 0
             });
@@ -77,12 +77,14 @@ let vm = new Vue({
          * @param {Number} arrayID 
          */
         retirerElm(array, arrayID) {
-            if (array.length == arrayID) {
-                array.pop();
-            }
-            else {
-                array.splice(arrayID, 1);
-            }
+            index = array.indexOf(array[arrayID]);
+
+            array.splice(index, 1);
+            // if (array.length == arrayID) {
+            //     array.pop();
+            // }
+            // else {
+            // }
         },
         genererJSON () {
             const prenom = this.prenom_client.toLowerCase();

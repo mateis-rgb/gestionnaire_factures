@@ -125,7 +125,7 @@
                                                 <v-text-field v-model="activite.tarif" small></v-text-field>
                                             </td>
                                             <td class="text-right">
-                                                <v-btn v-if="activite.id != 0" fab small color="error" dark @click="retirerElm(activite.id)">
+                                                <v-btn v-if="activite.id != 0" fab small color="error" dark @click="retirerElm(activites, activite.id)">
                                                     <v-icon>
                                                         mdi-minus
                                                     </v-icon>
