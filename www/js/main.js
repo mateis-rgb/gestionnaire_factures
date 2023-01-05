@@ -80,11 +80,6 @@ let vm = new Vue({
             index = array.indexOf(array[arrayID]);
 
             array.splice(index, 1);
-            // if (array.length == arrayID) {
-            //     array.pop();
-            // }
-            // else {
-            // }
         },
         genererJSON () {
             const prenom = this.prenom_client.toLowerCase();

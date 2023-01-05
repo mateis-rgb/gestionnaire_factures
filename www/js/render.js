@@ -24,7 +24,7 @@ function createHTML (facture) {
     var total = 0;
 
     prestations.forEach(item => {
-        total += item.tarif;
+        total += parseInt(item.tarif);
     });
 
     var html = document.createElement("html");
