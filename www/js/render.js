@@ -36,7 +36,8 @@ function createHTML (facture) {
     <title>Facture</title>
     <style>
         * {
-            font-family: "Montserrat";
+            font-family: "Avenir";
+            font-height: 14px;
         }
 
         .text-center {

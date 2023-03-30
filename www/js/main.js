@@ -21,7 +21,7 @@ let vm = new Vue({
             nom_client: "",
             prenom_client: "",
             select_periode: null,
-            periodes: [ "Saison 2022 - 2023", "Saison 2023 - 2024", "Saison 2024 - 2025", "Saison 2025 - 2026", "Saison 2026 - 2027", "Saison 2027 - 2028", "Saison 2028 - 2029", "Saison 2029 - 2030" ],
+            periodes: [ "Saison 2023 - 2024", "Saison 2024 - 2025", "Saison 2025 - 2026", "Saison 2026 - 2027", "Saison 2027 - 2028", "Saison 2028 - 2029", "Saison 2029 - 2030" ],
             n_facture: null,
             date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
             menu: false,
@@ -42,7 +42,7 @@ let vm = new Vue({
                 { text: 'Date de création', value: 'dateCreation' },
                 { text: 'Montant TTC', value: 'montantTotal' },
                 { text: "", value: "action", sortable: false }
-            ]
+            ],
         }
     },
     methods: {
@@ -62,8 +62,6 @@ let vm = new Vue({
         changeTheme() {
             this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
             localStorage.setItem("theme", this.$vuetify.theme.dark.toString());
-        },
-        openSaveDialog() {
         },
         ajouterActivite() {
             this.activites.push({
@@ -135,6 +133,7 @@ let vm = new Vue({
             html2pdf(file, options);
 
             this.bottom = !this.bottom;
+            this.step = 4;
         },
         save() {
             this.genererJSON();
@@ -144,7 +143,6 @@ let vm = new Vue({
                 if (arr.length) {
                     let index = 0;
 
-                    console.log("toto");
                     for (let k = 0; k < arr.length; k++) {
                         if (arr[k].n_facture === this.facture.n_facture) {
                             index = k;
